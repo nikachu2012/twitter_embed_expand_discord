@@ -49,7 +49,7 @@ async def on_message(message: discord.Message):
                 await message.channel.send(err_msg)
 
     except Exception as e:
-        await message.reply(f"{err_msg}\n```\n{e}\n```")
+        await message.channel.send(f"予期してないエラーが発生しました\n```\n{e}\n```")
 
     finally:
         return
