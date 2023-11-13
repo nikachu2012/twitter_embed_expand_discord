@@ -14,7 +14,7 @@ intents.message_content = True
 client = discord.Client(intents=intents)
 
 re_username = re.compile(r"^https://(?:x|twitter)\.com/(.*?)/status/([0-9]*)$")
-re_postid = re.compile(r"[0-9]+")
+re_start = re.compile(r"^https://(?:x|twitter)\.com/")
 
 
 @client.event
@@ -28,16 +28,19 @@ async def on_message(message: discord.Message):
     if message.author.bot:  # ボットのメッセージは無視
         return
 
-    match = re_username.match(message.content)
+    if re_start.match(message.content):
+        match = re_username.match(message.content)
 
-    if match != None:
-        matchGroup = match.groups()
-        await message.reply(
-            f"https://vxtwitter.com/{matchGroup[0]}/status/{matchGroup[1]}"
-        )
-        return
-    else:
-        await message.channel.send("蛍は可愛い！！！！")
+        if match != None:
+            matchGroup = match.groups()
+            await message.reply(
+                f"https://vxtwitter.com/{matchGroup[0]}/status/{matchGroup[1]}"
+            )
+            return
+        else:
+            await message.channel.send("Error")
+    
+    return
 
 
 client.run(os.environ["TOKEN"])
