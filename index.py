@@ -22,24 +22,41 @@ async def on_ready():
     print("on_ready")
     print(discord.__version__)
 
-
+err_msg = "error"
 @client.event
 async def on_message(message: discord.Message):
-    if message.author.bot:  # ボットのメッセージは無視
-        return
 
-    if re_start.match(message.content):
-        match = re_username.match(message.content)
+    try:
 
-        if match != None:
-            matchGroup = match.groups()
-            await message.reply(
-                f"https://vxtwitter.com/{matchGroup[0]}/status/{matchGroup[1]}"
-            )
+        if message.author.bot:  # ボットのメッセージは無視
             return
-        else:
-            await message.channel.send("Error")
-    
+
+        if re_start.match(message.content):
+            match = re_username.match(message.content)
+
+            if match != None:
+                matchGroup = match.groups()
+                result = f"https://vxtwitter.com/{matchGroup[0]}/status/{matchGroup[1]}"
+
+                if len(result) > 1999:
+                    await message.reply(
+                        await message.channel.send(err_msg)
+                    )
+                    return
+                
+                else: 
+                    await message.reply(
+                        f"https://vxtwitter.com/{matchGroup[0]}/status/{matchGroup[1]}"
+                    )
+                return
+            else:
+                await message.channel.send(err_msg)
+
+    except Exception as e:
+        await message.reply(
+            f"{err_msg}\n```\n{e}\n```"
+        )
+
     return
 
 
