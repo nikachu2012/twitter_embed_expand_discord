@@ -14,7 +14,7 @@ intents.message_content = True
 client = discord.Client(intents=intents)
 
 re_username = re.compile(r"^https://(?:x|twitter)\.com/(.*?)/status/([0-9]*)$")
-re_start = re.compile(r"^https://(?:x|twitter)\.com/")
+re_start = re.compile(r"^https://(?:x|twitter)\.com\/.*\/status\/.*")
 
 
 @client.event
